@@ -5,6 +5,8 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
 const dishRouter = require('./routes/dishRouter');
+const leaderRouter = require('./routes/leaderRouter');
+const promoRouter = require('./routes/promoRouter');
 const hostname = 'localhost';
 const port = 3000;
 
@@ -15,6 +17,8 @@ app.use(morgan('dev'));
 
 // mount the endpoint dishRouter
 app.use('/dishes', dishRouter);
+app.use('/promotions', promoRouter);
+app.use('/leaders', leaderRouter);
 
 // tells express to serve static file from __dirname (root of this project), in public folder
 app.use(express.static(__dirname + '/public'));
@@ -22,6 +26,16 @@ app.use(bodyParser.json());
 
 // for all method, set status code to 200
 app.all('/dishes', (req, res, next) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  next(); //it will continue on to look for additional specification below
+});
+app.all('/leaders', (req, res, next) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  next(); //it will continue on to look for additional specification below
+});
+app.all('/promotions', (req, res, next) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
   next(); //it will continue on to look for additional specification below
