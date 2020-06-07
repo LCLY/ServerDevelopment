@@ -4,6 +4,7 @@ const http = require('http');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
+const dishRouter = require('./routes/dishRouter');
 const hostname = 'localhost';
 const port = 3000;
 
@@ -11,6 +12,10 @@ const app = express();
 
 // use middleware
 app.use(morgan('dev'));
+
+// mount the endpoint dishRouter
+app.use('/dishes', dishRouter);
+
 // tells express to serve static file from __dirname (root of this project), in public folder
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
@@ -20,33 +25,6 @@ app.all('/dishes', (req, res, next) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
   next(); //it will continue on to look for additional specification below
-});
-
-// REST API
-// after next() it will come to here below, in any of the methods, be it get, post, put or delete
-app.get('/dishes', (req, res, next) => {
-  // req and res has already passed from all
-  res.end('Will send all the dishes to you!');
-});
-
-app.post('/dishes', (req, res, next) => {
-  // req and res has already passed from all
-  // post will carry some data in the body
-  res.end(
-    'Will add the dish: ' +
-      req.body.name +
-      ' with details ' +
-      req.body.description
-  );
-});
-
-app.put('/dishes', (req, res, next) => {
-  res.statusCode = 403;
-  res.end('PUT operation not supported on /dishes');
-});
-
-app.delete('/dishes', (req, res, next) => {
-  res.end('Deleting all the dishes');
 });
 
 // REST with specific id
